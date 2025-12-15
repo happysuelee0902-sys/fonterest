@@ -194,10 +194,310 @@ body {
     padding: 24px;
 }
 
+/* Modal */
+.modal.hidden {
+    display: none;
+}
+
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+}
+
+.modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(2px);
+}
+
+.modal-content {
+    position: relative;
+    width: min(480px, 92vw);
+    max-height: 92vh;
+    background: #fff;
+    border-radius: 18px;
+    padding: 16px 20px 24px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.2);
+    z-index: 201;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow: hidden;
+}
+
+.modal-content.wide {
+    width: min(900px, 94vw);
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.modal-title .title {
+    font-size: 22px;
+    font-weight: 800;
+}
+
+.icon-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    transition: background-color 0.15s ease;
+}
+
+.icon-btn:hover {
+    background: #f2f2f2;
+}
+
+.modal-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-action {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 8px;
+    border-radius: 12px;
+    transition: background-color 0.15s ease;
+}
+
+.modal-action:hover {
+    background: #fafafa;
+}
+
+.action-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
+    display: grid;
+    place-items: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #fff;
+}
+
+.action-icon.red {
+    background: #e60023;
+}
+
+.action-icon.gray {
+    background: #ddd;
+    color: #444;
+}
+
+.action-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.action-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #222;
+}
+
+.action-desc {
+    font-size: 14px;
+    color: #666;
+}
+
+.modal-illustration {
+    margin-top: 8px;
+    text-align: center;
+    display: grid;
+    gap: 12px;
+    place-items: center;
+}
+
+.illu-circle {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #c4d5ff, #d7e7ff);
+    display: grid;
+    place-items: center;
+    font-size: 48px;
+}
+
+.illu-text {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #444;
+    max-width: 360px;
+}
+
+/* Modal form */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field-label {
+    font-size: 14px;
+    color: #555;
+    font-weight: 600;
+}
+
+#createBoardInput {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    font-size: 15px;
+}
+
+#createBoardInput:focus {
+    outline: none;
+    border-color: #e60023;
+    box-shadow: 0 0 0 3px rgba(230, 0, 35, 0.15);
+}
+
+.modal-actions.row {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.primary-btn,
+.ghost-btn {
+    padding: 10px 16px;
+    border-radius: 10px;
+    border: 1px solid transparent;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.primary-btn {
+    background: #e60023;
+    color: #fff;
+    border-color: #e60023;
+}
+
+.primary-btn:hover {
+    filter: brightness(0.95);
+}
+
+.ghost-btn {
+    background: #f5f5f5;
+    color: #333;
+    border-color: #e0e0e0;
+}
+
+.ghost-btn:hover {
+    background: #ededed;
+}
+
+/* Boards */
+.boards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.board-card {
+    background: #fff;
+    border-radius: 16px;
+    border: 1px solid #eee;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+.board-thumb {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(2, 80px);
+    background: #f8f8f8;
+}
+
+.board-thumb-cell {
+    border: 1px solid #f0f0f0;
+    padding: 8px;
+    font-size: 12px;
+    color: #333;
+    display: grid;
+    align-items: center;
+    justify-items: center;
+    text-align: center;
+}
+
+.board-meta {
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.board-title {
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.board-count {
+    font-size: 13px;
+    color: #666;
+}
+
+.board-item {
+    width: 100%;
+    text-align: left;
+}
+
 .hint {
     text-align: center;
     margin-bottom: 32px;
     color: #666;
+}
+
+.board-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.board-chip {
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    padding: 10px 14px;
+    background: #f8f8f8;
+    cursor: pointer;
+    font-weight: 600;
+    color: #333;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.board-chip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+}
+
+.board-chip.active {
+    background: #111;
+    color: #fff;
+    border-color: #111;
 }
 
 /* Masonry Feed */
@@ -234,12 +534,59 @@ body {
     cursor: pointer;
     transition: transform 0.2s, background-color 0.2s;
     border: 1px solid transparent;
+    position: relative;
 }
 
 .card:hover {
     transform: translateY(-2px);
     background-color: var(--card-hover);
     border-color: #eee;
+}
+
+.card-overlay {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+}
+
+.card:hover .card-overlay {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.card-badge {
+    display: none;
+}
+
+.card-save {
+    pointer-events: auto;
+    border: none;
+    background: #e60023;
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.card-save:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.18);
+}
+
+.card-save:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
 }
 
 .card-content {

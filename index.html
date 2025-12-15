@@ -10,20 +10,19 @@
 
 <body>
     <aside class="sidebar" aria-label="Sidebar">
-        <a class="nav-btn" href="#" aria-label="홈">
+        <a id="homeBtn" class="nav-btn" href="#" aria-label="홈">
             <span class="icon">🏠</span>
         </a>
         <a class="nav-btn" href="#" aria-label="검색">
             <span class="icon">🔍</span>
         </a>
-        <a class="nav-btn" href="#" aria-label="새 아이디어 추가">
+        <a id="createBoardBtn" class="nav-btn" href="#" aria-label="새 아이디어 추가">
             <span class="icon">➕</span>
         </a>
-        <a class="nav-btn" href="#" aria-label="알림">
+        <a id="notifyBtn" class="nav-btn" href="#" aria-label="알림">
             <span class="icon">🔔</span>
-            <span class="badge">21</span>
         </a>
-        <a class="nav-btn" href="#" aria-label="채팅">
+        <a id="messageBtn" class="nav-btn" href="#" aria-label="채팅">
             <span class="icon">💬</span>
         </a>
         <a class="nav-btn" href="#" aria-label="설정">
@@ -47,30 +46,135 @@
                 <input id="searchInput" type="search" placeholder="검색어를 입력하세요 (예: 아기)" autocomplete="off" />
             </div>
 
-            <div class="profile-pill" aria-label="프로필">
+            <button id="profileBtn" class="profile-pill" aria-label="프로필">
                 <div class="avatar small">Y</div>
                 <div class="profile-meta">
                     <div class="profile-name">You</div>
                     <div class="profile-role">Creator</div>
                 </div>
-            </div>
+            </button>
         </header>
 
         <div class="layout">
             <!-- Main -->
             <main class="main">
-                <section class="hint">
-                    <div class="hintbox">
-                        <div class="hinttext">
-                            검색어를 입력하면 Gemini가 관련 단어와 문구를 브레인스토밍해줍니다.
-                        </div>
-                    </div>
-                </section>
+                <section class="board-bar" id="boardBar" aria-label="Boards"></section>
 
                 <!-- Pinterest-like column masonry -->
                 <section id="feed" class="feed" aria-label="Feed"></section>
             </main>
         </div>
+    </div>
+
+    <!-- Message modal -->
+    <div id="messageModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="messageTitle">
+        <div class="modal-content">
+            <header class="modal-header">
+                <button class="icon-btn" id="messageClose" aria-label="닫기">✕</button>
+                <div class="modal-title">
+                    <div class="title" id="messageTitle">메시지</div>
+                </div>
+                <button class="icon-btn" aria-label="더보기">⋯</button>
+            </header>
+
+            <section class="modal-actions">
+                <div class="modal-action">
+                    <div class="action-icon red">✏️</div>
+                    <div class="action-text">
+                        <div class="action-title">새 메시지</div>
+                        <div class="action-desc">친구에게 바로 보내세요</div>
+                    </div>
+                </div>
+                <div class="modal-action">
+                    <div class="action-icon gray">👥</div>
+                    <div class="action-text">
+                        <div class="action-title">친구 초대하기</div>
+                        <div class="action-desc">연결하여 채팅을 시작하세요.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="modal-illustration">
+                <div class="illu-circle">📨</div>
+                <p class="illu-text">
+                    업데이트는 핀과 보드의 활동을 보여주고 탐색할 주제에 대한 팁을 제공합니다. 곧 업데이트될 예정입니다.
+                </p>
+            </section>
+        </div>
+        <div class="modal-backdrop"></div>
+    </div>
+
+    <!-- Board select modal -->
+    <div id="boardModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="boardModalTitle">
+        <div class="modal-content">
+            <header class="modal-header">
+                <button class="icon-btn" id="boardClose" aria-label="닫기">✕</button>
+                <div class="modal-title">
+                    <div class="title" id="boardModalTitle">어디에 저장할까요?</div>
+                </div>
+                <div></div>
+            </header>
+            <section class="modal-actions" id="boardList"></section>
+        </div>
+        <div class="modal-backdrop"></div>
+    </div>
+
+    <!-- Profile boards modal -->
+    <div id="profileModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle">
+        <div class="modal-content wide">
+            <header class="modal-header">
+                <button class="icon-btn" id="profileClose" aria-label="닫기">✕</button>
+                <div class="modal-title">
+                    <div class="title" id="profileModalTitle">저장한 아이디어</div>
+                    <div class="subtitle">보드</div>
+                </div>
+                <div></div>
+            </header>
+            <section class="boards-grid" id="profileBoards"></section>
+        </div>
+        <div class="modal-backdrop"></div>
+    </div>
+
+    <!-- Create board modal -->
+    <div id="createBoardModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="createBoardTitle">
+        <div class="modal-content">
+            <header class="modal-header">
+                <button class="icon-btn" id="createBoardClose" aria-label="닫기">✕</button>
+                <div class="modal-title">
+                    <div class="title" id="createBoardTitle">새로운 보드 만들기</div>
+                </div>
+                <div></div>
+            </header>
+            <form class="modal-form" id="createBoardForm">
+                <label class="modal-field">
+                    <span class="field-label">보드 이름</span>
+                    <input id="createBoardInput" type="text" placeholder="예: 회화, 잡지, 폰트" autocomplete="off" required />
+                </label>
+                <div class="modal-actions row">
+                    <button type="button" class="ghost-btn" id="createBoardCancel">취소</button>
+                    <button type="submit" class="primary-btn">생성</button>
+                </div>
+            </form>
+        </div>
+        <div class="modal-backdrop"></div>
+    </div>
+
+    <!-- Notify modal -->
+    <div id="notifyModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="notifyTitle">
+        <div class="modal-content">
+            <header class="modal-header">
+                <button class="icon-btn" id="notifyClose" aria-label="닫기">✕</button>
+                <div class="modal-title">
+                    <div class="title" id="notifyTitle">알림</div>
+                </div>
+                <div></div>
+            </header>
+            <section class="modal-illustration">
+                <div class="illu-circle">🔔</div>
+                <p class="illu-text">업데이트가 없습니다.</p>
+            </section>
+        </div>
+        <div class="modal-backdrop"></div>
     </div>
 
     <script type="module" src="./src/main.js"></script>
