@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Text Pinterest (Brainstorming)</title>
+  <script type="module" crossorigin src="/assets/index-DlEC1uGo.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-CB-IFyTh.css">
+</head>
+
+<body>
+    <aside class="sidebar" aria-label="Sidebar">
+        <a class="nav-btn" href="#" aria-label="홈">
+            <span class="icon">🏠</span>
+        </a>
+        <a class="nav-btn" href="#" aria-label="검색">
+            <span class="icon">🔍</span>
+        </a>
+        <a class="nav-btn" href="#" aria-label="새 아이디어 추가">
+            <span class="icon">➕</span>
+        </a>
+        <a class="nav-btn" href="#" aria-label="알림">
+            <span class="icon">🔔</span>
+            <span class="badge">21</span>
+        </a>
+        <a class="nav-btn" href="#" aria-label="채팅">
+            <span class="icon">💬</span>
+        </a>
+        <a class="nav-btn" href="#" aria-label="설정">
+            <span class="icon">⚙️</span>
+        </a>
+        <div class="nav-profile" aria-label="프로필">
+            <div class="avatar">Y</div>
+            <div class="profile-name">You</div>
+        </div>
+    </aside>
+
+    <div class="page">
+        <!-- Top bar -->
+        <header class="topbar">
+            <div class="logo" aria-label="Logo">
+                <span class="dot"></span>
+                <span class="logo-text">Brainstorm</span>
+            </div>
+
+            <div class="search">
+                <input id="searchInput" type="search" placeholder="검색어를 입력하세요 (예: 아기)" autocomplete="off" />
+            </div>
+
+            <div class="profile-pill" aria-label="프로필">
+                <div class="avatar small">Y</div>
+                <div class="profile-meta">
+                    <div class="profile-name">You</div>
+                    <div class="profile-role">Creator</div>
+                </div>
+            </div>
+        </header>
+
+        <div class="layout">
+            <!-- Main -->
+            <main class="main">
+                <section class="hint">
+                    <div class="hintbox">
+                        <div class="hinttext">
+                            검색어를 입력하면 Gemini가 관련 단어와 문구를 브레인스토밍해줍니다.
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Pinterest-like column masonry -->
+                <section id="feed" class="feed" aria-label="Feed"></section>
+            </main>
+        </div>
+    </div>
+
+</body>
+
+</html>
