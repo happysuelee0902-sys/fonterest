@@ -622,6 +622,32 @@ body {
     margin-bottom: 20px;
 }
 
+.board-add {
+    margin-bottom: 16px;
+}
+
+.board-add.hidden {
+    display: none;
+}
+
+.board-add form {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.board-add input {
+    flex: 1;
+    min-width: 220px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid #ddd;
+}
+
+.board-add .primary-btn {
+    padding: 10px 16px;
+}
+
 .board-chip {
     border: 1px solid #e0e0e0;
     border-radius: 16px;

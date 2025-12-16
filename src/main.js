@@ -19,6 +19,10 @@ const createBoardClose = document.getElementById("createBoardClose");
 const createBoardCancel = document.getElementById("createBoardCancel");
 const createBoardForm = document.getElementById("createBoardForm");
 const createBoardInput = document.getElementById("createBoardInput");
+const boardAdd = document.getElementById("boardAdd");
+const boardAddForm = document.getElementById("boardAddForm");
+const boardAddInput = document.getElementById("boardAddInput");
+const searchBtn = document.getElementById("searchBtn");
 const notifyBtn = document.getElementById("notifyBtn");
 const notifyModal = document.getElementById("notifyModal");
 const notifyClose = document.getElementById("notifyClose");
@@ -44,6 +48,7 @@ let lastResults = [];
 let currentBoardView = null; // 현재 보드 필터
 let selectedText = "";
 const BOARD_KEY = "brainstorm_boards";
+
 const LIKE_KEY = "brainstorm_likes";
 const COMMENT_KEY = "brainstorm_comments";
 let boards = {
@@ -52,6 +57,7 @@ let boards = {
 };
 let likes = {};
 let comments = {};
+
 
 function loadBoards() {
     try {
@@ -70,6 +76,13 @@ function saveBoards() {
         localStorage.setItem(BOARD_KEY, JSON.stringify(boards));
     } catch (e) {
         console.error("Failed to save boards", e);
+    }
+}
+
+function ensureDefaultBoards() {
+    const names = Object.keys(boards || {});
+    if (!names.length) {
+        boards = { ...DEFAULT_BOARDS };
     }
 }
 
@@ -132,6 +145,7 @@ function updateProfileBoards() {
 
 function renderBoardBar() {
     if (!boardBarEl) return;
+    ensureDefaultBoards();
     boardBarEl.innerHTML = "";
     Object.keys(boards).forEach((name) => {
         const chip = document.createElement("button");
@@ -143,6 +157,7 @@ function renderBoardBar() {
             currentBoardView = name;
             renderBoardBar();
             showBoardItems(name);
+            toggleBoardAddVisibility();
         });
         boardBarEl.appendChild(chip);
     });
@@ -161,6 +176,15 @@ function closeCreateBoardModal() {
     if (!createBoardModal) return;
     createBoardModal.classList.add("hidden");
     if (createBoardInput) createBoardInput.value = "";
+}
+
+function toggleBoardAddVisibility() {
+    if (!boardAdd) return;
+    if (currentBoardView) {
+        boardAdd.classList.remove("hidden");
+    } else {
+        boardAdd.classList.add("hidden");
+    }
 }
 
 function getRelated(text) {
@@ -200,6 +224,7 @@ function openDetail(text) {
     // 관련된 텍스트로 피드 업데이트
     const related = getRelated(text);
     if (related.length) render(related);
+    toggleBoardAddVisibility();
 }
 
 function closeDetail() {
@@ -321,7 +346,7 @@ async function callGemini(keyword) {
     ];
 
     const keywordSeed = keyword || "아이디어";
-    const count = 100; // 더 많은 예시 생성
+    const count = 500; // 더 많은 예시 생성
     const shuffledSeeds = [...seeds].sort(() => 0.5 - Math.random());
     const shuffledVars = [...variations].sort(() => 0.5 - Math.random());
     const combos = [];
@@ -335,8 +360,14 @@ async function callGemini(keyword) {
 }
 
 function createCard(text) {
+    const item = typeof text === "string" ? { text } : text;
+    const contentText = item.text || "";
     const card = document.createElement("article");
     card.className = "card text-card";
+    if (item.color) {
+        card.style.backgroundColor = item.color;
+        card.style.color = "#111";
+    }
     card.addEventListener("click", () => openDetail(text));
 
     const overlay = document.createElement("div");
@@ -356,7 +387,7 @@ function createCard(text) {
 
     const content = document.createElement("div");
     content.className = "card-content";
-    content.textContent = text;
+    content.textContent = contentText;
 
     card.appendChild(content);
     card.appendChild(overlay);
@@ -585,6 +616,19 @@ createBoardForm?.addEventListener("submit", (e) => {
     closeCreateBoardModal();
 });
 
+boardAddForm?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    if (!currentBoardView || !boardAddInput) return;
+    const text = boardAddInput.value.trim();
+    if (!text) return;
+    const newItem = { text, color: "#FF9999" };
+    boards[currentBoardView] = boards[currentBoardView] || [];
+    boards[currentBoardView].push(newItem);
+    saveBoards();
+    showBoardItems(currentBoardView);
+    boardAddInput.value = "";
+});
+
 notifyBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     notifyModal?.classList.remove("hidden");
@@ -599,6 +643,11 @@ notifyModal?.addEventListener("click", (e) => {
     if (e.target === notifyModal || e.target.classList.contains("modal-backdrop")) {
         notifyModal?.classList.add("hidden");
     }
+});
+
+searchBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    window.open("https://chatgpt.com", "_blank");
 });
 
 settingsBtn?.addEventListener("click", (e) => {
@@ -652,6 +701,7 @@ loadBoards();
 updateProfileBoards();
 renderBoardBar();
 loadReactions();
+toggleBoardAddVisibility();
 
 // Initial demo
 // render(["Search for something...", "Ideas will appear here", "Try 'Ocean'", "Try 'Future'"]);
