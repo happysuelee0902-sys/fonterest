@@ -38,6 +38,7 @@ const saveDetailBtn = document.getElementById("saveDetailBtn");
 const commentListEl = document.getElementById("commentList");
 const commentInputEl = document.getElementById("commentInput");
 const commentSubmit = document.getElementById("commentSubmit");
+const logoBtn = document.getElementById("logoBtn");
 
 // Initial state
 let isLoading = false;
@@ -45,6 +46,8 @@ let currentRequestId = 0; // 오래된 응답을 무시하기 위한 토큰
 let pendingSaveText = null;
 let lastKeyword = "";
 let lastResults = [];
+let lastSearchKeyword = "";
+let lastSearchResults = [];
 let currentBoardView = null; // 현재 보드 필터
 let selectedText = "";
 const BOARD_KEY = "brainstorm_boards";
@@ -418,12 +421,17 @@ function resetFeed() {
 }
 
 function goHome() {
-    if (lastResults.length > 0) {
-        searchInput.value = lastKeyword;
-        render(lastResults);
+    currentBoardView = null;
+    if (lastSearchResults.length > 0) {
+        searchInput.value = lastSearchKeyword;
+        lastResults = lastSearchResults;
+        render(lastSearchResults);
     } else {
         resetFeed();
     }
+    renderBoardBar();
+    toggleBoardAddVisibility();
+    closeDetail();
 }
 
 function openBoardModal() {
@@ -469,7 +477,10 @@ function renderBoardList() {
                 boards[name].push(pendingSaveText);
                 saveBoards();
                 updateProfileBoards();
+                currentBoardView = name;
                 renderBoardBar();
+                showBoardItems(name);
+                toggleBoardAddVisibility();
             }
             closeBoardModal();
         });
@@ -485,6 +496,9 @@ function showBoardItems(name) {
     } else {
         render(items);
     }
+    lastResults = items;
+    lastKeyword = name;
+    toggleBoardAddVisibility();
 }
 
 async function handleSearch() {
@@ -505,6 +519,8 @@ async function handleSearch() {
             } else {
                 lastKeyword = keyword;
                 lastResults = results;
+                lastSearchKeyword = keyword;
+                lastSearchResults = results;
                 render(results);
             }
         }
@@ -521,6 +537,11 @@ searchInput.addEventListener("keydown", (e) => {
 });
 
 homeBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    goHome();
+});
+
+logoBtn?.addEventListener("click", (e) => {
     e.preventDefault();
     goHome();
 });
@@ -669,6 +690,7 @@ settingsModal?.addEventListener("click", (e) => {
 detailClose?.addEventListener("click", (e) => {
     e.preventDefault();
     closeDetail();
+    goHome();
 });
 
 likeBtn?.addEventListener("click", (e) => {
