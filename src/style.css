@@ -468,7 +468,8 @@ body {
 
 /* Detail modal */
 .detail-body {
-    display: block;
+    display: grid;
+    gap: 12px;
 }
 
 .detail-text {
@@ -490,7 +491,7 @@ body {
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
     display: grid;
     gap: 10px;
-    max-width: 680px;
+    width: min(760px, 50vw);
 }
 
 .detail-panel.hidden {
@@ -502,6 +503,68 @@ body {
     align-items: center;
     justify-content: space-between;
     gap: 8px;
+}
+
+.detail-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pill-btn {
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-weight: 700;
+}
+
+.pill-btn.primary {
+    background: #e60023;
+    color: #fff;
+    border-color: #e60023;
+}
+
+.pill-btn.small {
+    padding: 8px 12px;
+    font-size: 13px;
+}
+
+.comment-box {
+    background: #fafafa;
+    border: 1px solid #f0f0f0;
+    border-radius: 12px;
+    padding: 12px;
+    display: grid;
+    gap: 10px;
+}
+
+.comment-title {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.comment-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 180px;
+    overflow-y: auto;
+    font-size: 14px;
+    color: #444;
+}
+
+.comment-input {
+    display: flex;
+    gap: 8px;
+}
+
+.comment-input input {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
 }
 
 .hint {

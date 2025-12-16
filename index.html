@@ -60,6 +60,29 @@
             <main class="main">
                 <section class="board-bar" id="boardBar" aria-label="Boards"></section>
 
+                <!-- Selected idea panel -->
+                <section id="detailPanel" class="detail-panel hidden" aria-label="선택한 아이디어">
+                    <header class="detail-header">
+                        <div class="title" id="detailTitle">선택한 아이디어</div>
+                        <button class="icon-btn" id="detailClose" aria-label="닫기">✕</button>
+                    </header>
+                    <div class="detail-body">
+                        <div id="detailText" class="detail-text"></div>
+                        <div class="detail-actions">
+                            <button id="likeBtn" class="pill-btn">❤ <span id="likeCount">0</span></button>
+                            <button id="saveDetailBtn" class="pill-btn primary">저장</button>
+                        </div>
+                        <div class="comment-box">
+                            <div class="comment-title">댓글</div>
+                            <div id="commentList" class="comment-list"></div>
+                            <div class="comment-input">
+                                <input id="commentInput" type="text" placeholder="댓글을 남겨보세요" />
+                                <button id="commentSubmit" class="pill-btn small">등록</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Pinterest-like column masonry -->
                 <section id="feed" class="feed" aria-label="Feed"></section>
             </main>
@@ -176,17 +199,6 @@
         </div>
         <div class="modal-backdrop"></div>
     </div>
-
-    <!-- Detail inline panel -->
-    <section id="detailPanel" class="detail-panel hidden" aria-label="선택한 아이디어">
-        <header class="detail-header">
-            <div class="title" id="detailTitle">선택한 아이디어</div>
-            <button class="icon-btn" id="detailClose" aria-label="닫기">✕</button>
-        </header>
-        <div class="detail-body">
-            <div id="detailText" class="detail-text"></div>
-        </div>
-    </section>
 
     <script type="module" src="./src/main.js"></script>
 </body>

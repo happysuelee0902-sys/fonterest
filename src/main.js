@@ -25,6 +25,12 @@ const notifyClose = document.getElementById("notifyClose");
 const detailPanel = document.getElementById("detailPanel");
 const detailClose = document.getElementById("detailClose");
 const detailTextEl = document.getElementById("detailText");
+const likeBtn = document.getElementById("likeBtn");
+const likeCountEl = document.getElementById("likeCount");
+const saveDetailBtn = document.getElementById("saveDetailBtn");
+const commentListEl = document.getElementById("commentList");
+const commentInputEl = document.getElementById("commentInput");
+const commentSubmit = document.getElementById("commentSubmit");
 
 // Initial state
 let isLoading = false;
@@ -35,10 +41,14 @@ let lastResults = [];
 let currentBoardView = null; // 현재 보드 필터
 let selectedText = "";
 const BOARD_KEY = "brainstorm_boards";
+const LIKE_KEY = "brainstorm_likes";
+const COMMENT_KEY = "brainstorm_comments";
 let boards = {
     "회화": [],
     "잡지": []
 };
+let likes = {};
+let comments = {};
 
 function loadBoards() {
     try {
@@ -57,6 +67,24 @@ function saveBoards() {
         localStorage.setItem(BOARD_KEY, JSON.stringify(boards));
     } catch (e) {
         console.error("Failed to save boards", e);
+    }
+}
+
+function loadReactions() {
+    try {
+        likes = JSON.parse(localStorage.getItem(LIKE_KEY) || "{}");
+        comments = JSON.parse(localStorage.getItem(COMMENT_KEY) || "{}");
+    } catch (e) {
+        console.error("Failed to load reactions", e);
+    }
+}
+
+function saveReactions() {
+    try {
+        localStorage.setItem(LIKE_KEY, JSON.stringify(likes));
+        localStorage.setItem(COMMENT_KEY, JSON.stringify(comments));
+    } catch (e) {
+        console.error("Failed to save reactions", e);
     }
 }
 
@@ -155,13 +183,15 @@ function getRelated(text) {
 }
 
 function renderRelated(text) {
-    // no-op (related UI removed)
+    if (!commentListEl) return; // keep compatibility
     return;
 }
 
 function openDetail(text) {
     selectedText = text;
     if (detailTextEl) detailTextEl.textContent = text;
+    if (likeCountEl) likeCountEl.textContent = likes[text] || 0;
+    renderComments(text);
     renderRelated(text);
     detailPanel?.classList.remove("hidden");
     // 관련된 텍스트로 피드 업데이트
@@ -173,8 +203,34 @@ function closeDetail() {
     detailPanel?.classList.add("hidden");
 }
 
-function toggleLike() { return; }
-function submitComment() { return; }
+function toggleLike() {
+    if (!selectedText) return;
+    likes[selectedText] = (likes[selectedText] || 0) + 1;
+    if (likeCountEl) likeCountEl.textContent = likes[selectedText];
+    saveReactions();
+}
+
+function renderComments(text) {
+    if (!commentListEl) return;
+    const list = comments[text] || [];
+    commentListEl.innerHTML = "";
+    list.forEach((c) => {
+        const div = document.createElement("div");
+        div.textContent = c;
+        commentListEl.appendChild(div);
+    });
+}
+
+function submitComment() {
+    if (!selectedText || !commentInputEl) return;
+    const value = commentInputEl.value.trim();
+    if (!value) return;
+    if (!comments[selectedText]) comments[selectedText] = [];
+    comments[selectedText].push(value);
+    commentInputEl.value = "";
+    renderComments(selectedText);
+    saveReactions();
+}
 
 async function callGemini(keyword) {
     const seeds = [
@@ -576,6 +632,7 @@ commentInputEl?.addEventListener("keydown", (e) => {
 loadBoards();
 updateProfileBoards();
 renderBoardBar();
+loadReactions();
 
 // Initial demo
 // render(["Search for something...", "Ideas will appear here", "Try 'Ocean'", "Try 'Future'"]);
