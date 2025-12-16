@@ -25,7 +25,7 @@
         <a id="messageBtn" class="nav-btn" href="#" aria-label="채팅">
             <span class="icon">💬</span>
         </a>
-        <a class="nav-btn" href="#" aria-label="설정">
+        <a id="settingsBtn" class="nav-btn" href="#" aria-label="설정">
             <span class="icon">⚙️</span>
         </a>
         <div class="nav-profile" aria-label="프로필">
@@ -195,6 +195,47 @@
             <section class="modal-illustration">
                 <div class="illu-circle">🔔</div>
                 <p class="illu-text">업데이트가 없습니다.</p>
+            </section>
+        </div>
+        <div class="modal-backdrop"></div>
+    </div>
+
+    <!-- Settings modal -->
+    <div id="settingsModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <div class="modal-content">
+            <header class="modal-header">
+                <button class="icon-btn" id="settingsClose" aria-label="닫기">✕</button>
+                <div class="modal-title">
+                    <div class="title" id="settingsTitle">설정 및 지원</div>
+                </div>
+                <div></div>
+            </header>
+            <section class="settings-list">
+                <div class="settings-group">
+                    <button class="settings-item">설정</button>
+                    <button class="settings-item">추천 설정</button>
+                    <button class="settings-item strong">서비스 연결</button>
+                    <button class="settings-item">신고 및 위반 센터</button>
+                    <button class="settings-item">베타 테스터 되기</button>
+                </div>
+                <div class="settings-separator">지원</div>
+                <div class="settings-group">
+                    <button class="settings-item">도움말 센터</button>
+                    <button class="settings-item">위젯 만들기</button>
+                    <button class="settings-item">삭제 항목</button>
+                    <button class="settings-item">맞춤 설정 광고</button>
+                    <button class="settings-item">개인정보 보호권</button>
+                    <button class="settings-item">개인정보처리방침</button>
+                    <button class="settings-item">서비스 약관</button>
+                </div>
+                <div class="settings-separator">리소스</div>
+                <div class="settings-links">
+                    <a href="#" class="settings-link">소개</a>
+                    <a href="#" class="settings-link">언론</a>
+                    <a href="#" class="settings-link">사업체</a>
+                    <a href="#" class="settings-link">채용 공고</a>
+                    <a href="#" class="settings-link">개발자</a>
+                </div>
             </section>
         </div>
         <div class="modal-backdrop"></div>

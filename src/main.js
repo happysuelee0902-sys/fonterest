@@ -22,6 +22,9 @@ const createBoardInput = document.getElementById("createBoardInput");
 const notifyBtn = document.getElementById("notifyBtn");
 const notifyModal = document.getElementById("notifyModal");
 const notifyClose = document.getElementById("notifyClose");
+const settingsBtn = document.getElementById("settingsBtn");
+const settingsModal = document.getElementById("settingsModal");
+const settingsClose = document.getElementById("settingsClose");
 const detailPanel = document.getElementById("detailPanel");
 const detailClose = document.getElementById("detailClose");
 const detailTextEl = document.getElementById("detailText");
@@ -595,6 +598,22 @@ notifyClose?.addEventListener("click", (e) => {
 notifyModal?.addEventListener("click", (e) => {
     if (e.target === notifyModal || e.target.classList.contains("modal-backdrop")) {
         notifyModal?.classList.add("hidden");
+    }
+});
+
+settingsBtn?.addEventListener("click", (e) => {
+    e.preventDefault();
+    settingsModal?.classList.remove("hidden");
+});
+
+settingsClose?.addEventListener("click", (e) => {
+    e.preventDefault();
+    settingsModal?.classList.add("hidden");
+});
+
+settingsModal?.addEventListener("click", (e) => {
+    if (e.target === settingsModal || e.target.classList.contains("modal-backdrop")) {
+        settingsModal?.classList.add("hidden");
     }
 });
 
