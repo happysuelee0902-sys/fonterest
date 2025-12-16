@@ -49,7 +49,9 @@ let lastResults = [];
 let lastSearchKeyword = "";
 let lastSearchResults = [];
 let currentBoardView = null; // 현재 보드 필터
+let selectedItem = null;
 let selectedText = "";
+let selectedFont = "";
 const BOARD_KEY = "brainstorm_boards";
 
 const LIKE_KEY = "brainstorm_likes";
@@ -58,6 +60,22 @@ let boards = {
     "회화": [],
     "잡지": []
 };
+const CARD_FONTS = [
+    '"Helvetica Neue", Arial, sans-serif',
+    '"Gill Sans", "Segoe UI", sans-serif',
+    '"Georgia", "Times New Roman", serif',
+    '"Courier New", Consolas, monospace',
+    '"Futura", "Trebuchet MS", sans-serif',
+    '"Didot", "Bodoni MT", serif',
+    '"Black Han Sans", sans-serif',
+    '"Bagel Fat One", cursive',
+    '"Grandiflora One", serif',
+    '"Gasoek One", sans-serif',
+    '"Stylish", sans-serif',
+    "'PartialSans', sans-serif",
+    "'RoundedFixedsys', monospace",
+    "'InkLiquid', cursive"
+];
 let likes = {};
 let comments = {};
 
@@ -105,6 +123,22 @@ function saveReactions() {
     } catch (e) {
         console.error("Failed to save reactions", e);
     }
+}
+
+function pickFont() {
+    const idx = Math.floor(Math.random() * CARD_FONTS.length);
+    return CARD_FONTS[idx];
+}
+
+function normalizeItem(input) {
+    if (typeof input === "string") {
+        return { text: input, font: pickFont() };
+    }
+    return {
+        text: input?.text || "",
+        font: input?.font || pickFont(),
+        color: input?.color
+    };
 }
 
 function updateProfileBoards() {
@@ -217,15 +251,21 @@ function renderRelated(text) {
     return;
 }
 
-function openDetail(text) {
-    selectedText = text;
-    if (detailTextEl) detailTextEl.textContent = text;
-    if (likeCountEl) likeCountEl.textContent = likes[text] || 0;
-    renderComments(text);
-    renderRelated(text);
+function openDetail(input) {
+    const item = normalizeItem(input);
+    selectedItem = item;
+    selectedText = item.text;
+    selectedFont = item.font || pickFont();
+    if (detailTextEl) {
+        detailTextEl.textContent = item.text;
+        detailTextEl.style.fontFamily = selectedFont;
+    }
+    if (likeCountEl) likeCountEl.textContent = likes[item.text] || 0;
+    renderComments(item.text);
+    renderRelated(item.text);
     detailPanel?.classList.remove("hidden");
     // 관련된 텍스트로 피드 업데이트
-    const related = getRelated(text);
+    const related = getRelated(item.text);
     if (related.length) render(related);
     toggleBoardAddVisibility();
 }
@@ -363,15 +403,16 @@ async function callGemini(keyword) {
 }
 
 function createCard(text) {
-    const item = typeof text === "string" ? { text } : text;
+    const item = normalizeItem(text);
     const contentText = item.text || "";
+    const fontFamily = item.font || pickFont();
     const card = document.createElement("article");
     card.className = "card text-card";
     if (item.color) {
         card.style.backgroundColor = item.color;
         card.style.color = "#111";
     }
-    card.addEventListener("click", () => openDetail(text));
+    card.addEventListener("click", () => openDetail(item));
 
     const overlay = document.createElement("div");
     overlay.className = "card-overlay";
@@ -391,6 +432,7 @@ function createCard(text) {
     const content = document.createElement("div");
     content.className = "card-content";
     content.textContent = contentText;
+    content.style.fontFamily = fontFamily;
 
     card.appendChild(content);
     card.appendChild(overlay);
@@ -642,7 +684,7 @@ boardAddForm?.addEventListener("submit", (e) => {
     if (!currentBoardView || !boardAddInput) return;
     const text = boardAddInput.value.trim();
     if (!text) return;
-    const newItem = { text, color: "#FF9999" };
+    const newItem = { text, color: "#FF9999", font: pickFont() };
     boards[currentBoardView] = boards[currentBoardView] || [];
     boards[currentBoardView].push(newItem);
     saveBoards();
@@ -700,8 +742,8 @@ likeBtn?.addEventListener("click", (e) => {
 
 saveDetailBtn?.addEventListener("click", (e) => {
     e.preventDefault();
-    if (selectedText) {
-        pendingSaveText = selectedText;
+    if (selectedItem) {
+        pendingSaveText = selectedItem;
         openBoardModal();
     }
 });
